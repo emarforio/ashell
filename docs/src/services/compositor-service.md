@@ -98,7 +98,7 @@ pub enum CompositorCommand {
     FocusWorkspace(i32),
     FocusNamedWorkspace(String),
     ToggleSpecialWorkspace(String),
-    CustomDispatch(String, String), // For "vdesk"
+    FocusVirtualDesktop(i32), // hyprland-virtual-desktops plugin
     NextLayout,
     FocusAppWindow {
         pid: Option<u32>,

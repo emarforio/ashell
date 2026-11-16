@@ -38,14 +38,9 @@ pub async fn execute_command(cmd: CompositorCommand) -> Result<()> {
         CompositorCommand::NextLayout => Action::SwitchLayout {
             layout: niri_ipc::LayoutSwitchTarget::Next,
         },
-        CompositorCommand::CustomDispatch(action, args) => {
-            if action == "spawn" {
-                Action::SpawnSh { command: args }
-            } else {
-                return Err(anyhow!("Unknown custom dispatch: {}", action));
-            }
+        CompositorCommand::FocusVirtualDesktop(_) => {
+            return Err(anyhow!("Virtual desktops not supported in Niri backend"));
         }
-
         CompositorCommand::FocusAppWindow { pid, apps, title } => Action::FocusWindow {
             id: app_window_id(pid, &apps, title.as_deref()).await?,
         },

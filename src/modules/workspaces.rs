@@ -438,10 +438,7 @@ impl Workspaces {
                     if !already_active {
                         if self.config.enable_virtual_desktops {
                             return service
-                                .command(CompositorCommand::CustomDispatch(
-                                    "vdesk".to_string(),
-                                    id.to_string(),
-                                ))
+                                .command(CompositorCommand::FocusVirtualDesktop(id))
                                 .map(|event| Message::ServiceEvent(Box::new(event)));
                         }
                         return service

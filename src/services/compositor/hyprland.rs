@@ -85,8 +85,8 @@ async fn dispatch_hyprlang(cmd: CompositorCommand) -> Result<()> {
                 hyprland::ctl::switch_xkb_layout::SwitchXKBLayoutCmdTypes::Next,
             )?;
         }
-        CompositorCommand::CustomDispatch(dispatcher, args) => {
-            Dispatch::call(DispatchType::Custom(&dispatcher, &args))?;
+        CompositorCommand::FocusVirtualDesktop(id) => {
+            Dispatch::call(DispatchType::Custom("vdesk", &id.to_string()))?;
         }
         CompositorCommand::FocusAppWindow { pid, apps, title } => {
             let selector = app_window_selector(pid, &apps, title.as_deref()).await?;
@@ -118,12 +118,10 @@ async fn dispatch_lua(cmd: CompositorCommand) -> Result<()> {
             )?;
             return Ok(());
         }
-        CompositorCommand::CustomDispatch(dispatcher, args) => {
-            // `dispatcher` is a Lua identifier and `args` is spliced in as a raw
-            // Lua expression (e.g. `{ workspace = "3" }`), not a string literal —
-            // escaping either would break valid input. The contract here is that
-            // the caller hands us Lua.
-            format!("hl.dispatch(hl.dsp.{dispatcher}({args}))")
+        CompositorCommand::FocusVirtualDesktop(id) => {
+            // Plugin dispatchers are not part of `hl.dsp`: the plugin exposes
+            // them as plain functions in its own namespace.
+            format!("hl.plugin.virtual_desktops.vdesk(\"{id}\")")
         }
         CompositorCommand::FocusAppWindow { pid, apps, title } => {
             format!(

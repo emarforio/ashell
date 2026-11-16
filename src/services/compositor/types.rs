@@ -133,7 +133,8 @@ pub enum CompositorCommand {
     FocusWorkspace(i32),
     FocusNamedWorkspace(String),
     ToggleSpecialWorkspace(String),
-    CustomDispatch(String, String), // For "vdesk"
+    /// Focus a virtual desktop of the hyprland-virtual-desktops plugin.
+    FocusVirtualDesktop(i32),
     NextLayout,
     /// Focus a window of an application: one owned by `pid`, or, when none is
     /// (XWayland or sandboxed apps report another pid), one whose app id or

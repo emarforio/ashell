@@ -79,6 +79,9 @@ pub async fn execute_command(cmd: CompositorCommand) -> Result<()> {
         CompositorCommand::FocusWorkspace(id) => {
             activate_workspace(|handles| handles.iter().find(|h| h.numeric_id == id).cloned())
         }
+        CompositorCommand::FocusVirtualDesktop(_) => Err(anyhow!(
+            "Virtual desktops not supported on the generic Wayland backend"
+        )),
         other => Err(anyhow!(
             "{other:?} is not supported on the generic Wayland backend"
         )),

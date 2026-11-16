@@ -111,14 +111,9 @@ pub async fn execute_command(cmd: CompositorCommand) -> Result<()> {
     match cmd {
         CompositorCommand::FocusWorkspace(id) => focus_workspace(id).await,
         CompositorCommand::NextLayout => dispatch("switch_keyboard_layout").await,
-        CompositorCommand::CustomDispatch(dispatcher, args) => {
-            let func = if args.is_empty() {
-                dispatcher
-            } else {
-                format!("{dispatcher},{args}")
-            };
-            dispatch(&func).await
-        }
+        CompositorCommand::FocusVirtualDesktop(_) => Err(anyhow!(
+            "Virtual desktops not supported on the MangoWC backend"
+        )),
         other => Err(anyhow!("{other:?} is not supported on the MangoWC backend")),
     }
 }
